@@ -1,0 +1,46 @@
+void dfs(int x)
+{
+	vis[x] = 1;
+
+	// find min_color not present in all the visited neigbours of x
+	vi nb_color;
+	for (auto nb : G[x])
+	{
+		if (vis[nb] == 1)
+		{
+			cerr << nb << ' ';
+			nb_color.pb(color[nb]);
+		}
+	}
+	sort(all(nb_color));
+	rep(i,1,n+1)
+	{
+		if (i > len(nb_color) or nb_color[i-1] != i)
+		{
+			color[x] = i;
+			break;
+		}
+	}
+
+	for (auto nb : G[x])
+	{
+		if (vis[nb] == 1) continue;
+		dfs(nb);
+	}
+}
+
+void solve()
+{
+	cin >> n >> m;
+	while (m--)
+	{
+		int u, v; cin >> u >> v;
+		G[u].pb(v);
+		G[v].pb(u);
+	}
+	color.assign(n+1, 1); vis.assign(n+1, 0);
+	dfs(1);
+
+	rep(i,1,n+1) cout << color[i] << ' ';
+	cout << '\n';
+}
